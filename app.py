@@ -114,7 +114,7 @@ async def main():
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, shorten))
 
     print("🤖 Bot is running...")
-    app.run_polling()
+    await app.run_polling()
 
 
 if __name__ == "__main__":
