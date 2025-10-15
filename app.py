@@ -114,4 +114,4 @@ async def main():
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, shorten))
 
     print("🤖 Bot is running...")
-    await app.run_polling()
+    app.run_polling()
