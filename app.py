@@ -105,13 +105,37 @@ async def shorten(update: Update, context: ContextTypes.DEFAULT_TYPE):
 # -------------------------
 # Main entry
 # -------------------------
-async def main():
-    await init_db()
-    token = os.environ.get("BOT_TOKEN") or "YOUR_FALLBACK_BOT_TOKEN"
-    app = Application.builder().token(token).build()
+# async def main():
+#     await init_db()
+#     token = os.environ.get("BOT_TOKEN") or "YOUR_FALLBACK_BOT_TOKEN"
+#     app = Application.builder().token(token).build()
 
-    app.add_handler(CommandHandler("start", start))
-    app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, shorten))
+#     app.add_handler(CommandHandler("start", start))
+#     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, shorten))
 
-    print("🤖 Bot is running...")
-    app.run_polling()
+#     print("🤖 Bot is running...")
+#     app.run_polling()
+
+import asyncio
+
+if __name__ == "__main__":
+    import nest_asyncio
+    nest_asyncio.apply()  # allows nested event loops on Render
+
+    async def runner():
+        await init_db()
+        token = os.environ.get("BOT_TOKEN") or "8474467617:AAH5CTvTVJ-fe6Hu_TKzr0TaKaFgE4dOfE4"
+        app = Application.builder().token(token).build()
+
+        app.add_handler(CommandHandler("start", start))
+        app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, shorten))
+
+        print("🤖 Bot is running...")
+        # Don't use asyncio.run() here — just start the bot
+        await app.initialize()
+        await app.start()
+        await app.updater.start_polling()
+        await asyncio.Event().wait()  # keeps it alive forever
+
+    asyncio.run(runner())
+
